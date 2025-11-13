@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bring Your Spotify Brain to Tidal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827, #020617);
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .wrapper {
+      max-width: 720px;
+      width: 100%;
+      padding: 2.5rem 1.5rem;
+    }
+    .card {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 1.5rem;
+      padding: 2.25rem 2rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    }
+    h1 {
+      font-size: 2rem;
+      line-height: 1.2;
+      margin: 0 0 0.75rem;
+    }
+    h1 span {
+      color: #38bdf8;
+    }
+    p {
+      margin: 0.35rem 0;
+      color: #cbd5f5;
+    }
+    .tagline {
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin-bottom: 1.5rem;
+    }
+    .quote {
+      font-style: italic;
+      margin: 1.25rem 0;
+      padding-left: 0.9rem;
+      border-left: 3px solid #38bdf8;
+      color: #e5e7eb;
+    }
+    .list {
+      margin: 1.5rem 0;
+      padding-left: 1.1rem;
+      font-size: 0.95rem;
+    }
+    .list li { margin-bottom: 0.4rem; }
+    .label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #9ca3af;
+      margin-bottom: 0.4rem;
+    }
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    input[type="email"] {
+      flex: 1 1 180px;
+      padding: 0.65rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid #4b5563;
+      background: #020617;
+      color: #e5e7eb;
+      outline: none;
+    }
+    input[type="email"]::placeholder { color: #6b7280; }
+    button {
+      border-radius: 999px;
+      border: none;
+      padding: 0.7rem 1.4rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      background: linear-gradient(135deg, #22c55e, #22d3ee);
+      color: #020617;
+    }
+    button:hover {
+      filter: brightness(1.07);
+      transform: translateY(-1px);
+    }
+    .footnote {
+      margin-top: 0.8rem;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.3rem;
+      font-size: 0.8rem;
+    }
+    .pill {
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      color: #9ca3af;
+    }
+    @media (max-width: 600px) {
+      .card { padding: 1.75rem 1.5rem; }
+      h1 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <main class="card">
+      <div class="tagline">MVP waitlist</div>
+      <h1>Switch to Tidal<span> without losing your Spotify brain.</span></h1>
+      <p class="quote">
+        “I tried Tidal, but the recommendations were pretty bad and the app felt hit-or-miss. Spotify just <strong>knows</strong> me.”
+      </p>
+      <p>
+        We’re building a tool that rebuilds your Spotify listening identity inside Tidal —
+        so it feels like you’ve been using Tidal for years on day one.
+      </p>
+
+      <ul class="list">
+        <li>Clone your top artists, tracks, and playlists</li>
+        <li>Recreate your recent listening patterns to train Tidal’s algorithm</li>
+        <li>Avoid the “cold start” of switching music apps</li>
+      </ul>
+
+      <div class="label">Get early access</div>
+      <!-- Replace this form action later with your real email tool (e.g., Tally, Typeform, Beehiiv, Mailchimp, etc.) -->
+      <form class="form-row">
+        <input type="email" placeholder="you@spotifyfan.com" required />
+        <button type="submit">Join the waitlist</button>
+      </form>
+      <div class="footnote">
+        No spam. Just an invite when we’re ready for early testers.
+      </div>
+
+      <div class="pill-row">
+        <div class="pill">Spotify → Tidal first</div>
+        <div class="pill">For people who love their recommendations</div>
+        <div class="pill">You keep your music identity</div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
