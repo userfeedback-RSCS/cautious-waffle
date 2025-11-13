@@ -171,22 +171,15 @@
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-
       const email = emailInput.value.trim();
       if (!email) return;
 
-      // Your Tally base URL (no query params)
-      const tallyBaseUrl = 'https://tally.so/forms/Y55DM5'; // <-- replace with your form URL
-
-      const url =
-        tallyBaseUrl +
-        '?email=' +
-        encodeURIComponent(email);
-
-      // Open Tally form in a new tab with email prefilled
-      window.open(url, '_blank');
+      // Send them to the survey page on this same Vercel site
+      const surveyUrl = '/survey.html?email=' + encodeURIComponent(email);
+      window.location.href = surveyUrl;
     });
   });
 </script>
+
 </body>
 </html>
