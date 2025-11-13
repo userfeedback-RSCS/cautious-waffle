@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Switch Music Apps Without Losing Yourself – Survey</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827, #020617);
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+    }
+    .wrapper {
+      max-width: 900px;
+      width: 100%;
+    }
+    .card {
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 1.5rem;
+      padding: 2.25rem 2rem 2.5rem;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+    }
+    h1 {
+      font-size: 1.9rem;
+      margin: 0 0 0.5rem;
+    }
+    h1 span {
+      color: #38bdf8;
+    }
+    p {
+      margin: 0.25rem 0 1.25rem;
+      color: #cbd5f5;
+    }
+    .tagline {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #9ca3af;
+      margin-bottom: 0.5rem;
+    }
+    .note {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      margin-top: 0.75rem;
+    }
+    iframe {
+      border-radius: 1rem;
+      width: 100%;
+      border: 0;
+      min-height: 1400px;
+    }
+    @media (max-width: 600px) {
+      .card { padding: 1.75rem 1.5rem 2rem; }
+      h1 { font-size: 1.6rem; }
+      iframe { min-height: 1600px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <main class="card">
+      <div class="tagline">MVP survey</div>
+      <h1>Help us build switching <span>without losing your Spotify brain.</span></h1>
+      <p>
+        Answer a few quick questions about how you’ve tried switching away from Spotify.
+        Your feedback directly shapes this MVP.
+      </p>
+
+      <script async src="https://tally.so/widgets/embed.js"></script>
+      <iframe
+        id="tally-survey"
+        title="Music Identity MVP Survey"
+        loading="lazy"
+        marginheight="0"
+        marginwidth="0"
+      ></iframe>
+
+      <div class="note">
+        Thank you for helping test this idea. This is early, scrappy, and very real.
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      // 1. Get email from this page's URL (e.g. /survey.html?email=foo@bar.com)
+      const params = new URLSearchParams(window.location.search);
+      const email = params.get('email') || '';
+
+      // 2. Base Tally form URL (replace with YOUR form URL)
+      const tallyBaseUrl = 'https://tally.so/forms/Y55DM5'; // <-- change this
+
+      // 3. Build query string for Tally: email + styling params
+      const queryParts = [];
+      if (email) {
+        queryParts.push('email=' + encodeURIComponent(email));
+      }
+      queryParts.push(
+        'transparentBackground=1',
+        'hideTitle=1',
+        'theme=dark',
+        'accentColor=%2338BDF8'
+      );
+
+      const src = tallyBaseUrl + '?' + queryParts.join('&');
+
+      // 4. Apply to iframe
+      const iframe = document.getElementById('tally-survey');
+      iframe.setAttribute('data-tally-src', src);
+      // widgets/embed.js will read data-tally-src automatically
+    })();
+  </script>
+</body>
+</html>
