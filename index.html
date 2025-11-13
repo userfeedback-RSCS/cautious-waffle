@@ -141,23 +141,17 @@
       </ul>
 
       <div class="label">Get early access</div>
-
-      <div style="margin-top: 1.25rem;">
-        <script async src="https://tally.so/widgets/embed.js"></script>
-        <iframe
-          data-tally-src="https://tally.so/r/Y55DM5?transparentBackground=1&hideTitle=1"
-          loading="lazy"
-          width="100%"
-          height="1400"
-          frameborder="0"
-          marginheight="0"
-          marginwidth="0"
-          style="border-radius: 1rem;"
-          title="Join the Waitlist"
-        ></iframe>
-      </div>
-
-      <div class="footnote" style="margin-top: 0.75rem;">
+      <form class="form-row" id="hero-waitlist-form">
+        <input
+          type="email"
+          id="hero-email"
+          placeholder="you@spotifyfan.com"
+          required
+        />
+        <button type="submit">Join the waitlist</button>
+      </form>
+      
+      <div class="footnote">
         No spam. Just an invite when we’re ready for early testers.
       </div>
 
@@ -168,5 +162,31 @@
       </div>
     </main>
   </div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('hero-waitlist-form');
+    const emailInput = document.getElementById('hero-email');
+
+    if (!form || !emailInput) return;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const email = emailInput.value.trim();
+      if (!email) return;
+
+      // Your Tally base URL (no query params)
+      const tallyBaseUrl = 'https://tally.so/forms/Y55DM5'; // <-- replace with your form URL
+
+      const url =
+        tallyBaseUrl +
+        '?email=' +
+        encodeURIComponent(email);
+
+      // Open Tally form in a new tab with email prefilled
+      window.open(url, '_blank');
+    });
+  });
+</script>
 </body>
 </html>
