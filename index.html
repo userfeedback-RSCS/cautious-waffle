@@ -15,6 +15,7 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      flex-direction: column;
     }
     .wrapper {
       max-width: 720px;
@@ -115,6 +116,22 @@
       border: 1px solid rgba(148,163,184,0.6);
       color: #9ca3af;
     }
+    footer {
+      margin-top: 3rem;
+      margin-bottom: 2rem;
+      font-size: 0.75rem;
+      text-align: center;
+      color: #6b7280;
+      width: 100%;
+    }
+    footer a {
+      color: #9ca3af;
+      text-decoration: none;
+      margin-right: 1rem;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
     @media (max-width: 600px) {
       .card { padding: 1.75rem 1.5rem; }
       h1 { font-size: 1.6rem; }
@@ -125,9 +142,10 @@
   <div class="wrapper">
     <main class="card">
       <div class="tagline">MVP waitlist</div>
-      <h1>Switch to Tidal<span> without losing your Spotify brain.</span></h1>
+      <h1>Switch to Tidal <span>without losing your Spotify brain.</span></h1>
       <p class="quote">
-        “I tried Tidal, but the recommendations were pretty bad and the app felt hit-or-miss. Spotify just <strong>knows</strong> me.”
+        “I tried Tidal, but the recommendations were pretty bad and the app felt hit-or-miss.
+        Spotify just <strong>knows</strong> me.”
       </p>
       <p>
         We’re building a tool that rebuilds your Spotify listening identity inside Tidal —
@@ -150,11 +168,10 @@
         />
         <button type="submit">Join the waitlist</button>
       </form>
-      
-      <div class="footnote" style="margin-top: 0.5rem; font-size: 0.75rem; color: #9ca3af;">
-        Heads up: by entering your email, you’re cool with us reaching out for early access, updates, and maybe a quick ‘can I ask you something?’ as we build this.
+      <div class="footnote">
+        Heads up: by entering your email, you’re cool with us reaching out for early access, updates,
+        and maybe a quick “can I ask you something?” as we build this.
       </div>
-
 
       <div class="pill-row">
         <div class="pill">Spotify → Tidal first</div>
@@ -163,44 +180,43 @@
       </div>
     </main>
   </div>
-  <footer style="margin-top: 2rem; font-size: 0.75rem; text-align: center; color: #6b7280;">
-    <a href="/privacy.html" style="color: #9ca3af; text-decoration: none; margin-right: 1rem;">
-    Privacy Policy
-    </a>
+
+  <footer>
+    <a href="/privacy.html">Privacy Policy</a>
     <span style="color: #4b5563;">•</span>
     <span style="margin-left: 1rem; color: #4b5563;">
-    Not affiliated with Spotify or Tidal.
+      Not affiliated with Spotify or Tidal.
     </span>
   </footer>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('hero-waitlist-form');
-    const emailInput = document.getElementById('hero-email');
 
-    if (!form || !emailInput) return;
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.getElementById('hero-waitlist-form');
+      const emailInput = document.getElementById('hero-email');
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+      if (!form || !emailInput) return;
 
-      const email = emailInput.value.trim();
-      if (!email) return;
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
 
-      // Fire-and-forget log to Vercel → Notion
-      fetch('/api/log-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email }),
-      }).catch(function (err) {
-        // Silent fail — we don't block the user if logging fails
-        console.error('Failed to log email:', err);
+        const email = emailInput.value.trim();
+        if (!email) return;
+
+        // Log to Notion via your Vercel API
+        fetch('/api/log-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email }),
+        }).catch(function (err) {
+          console.error('Failed to log email:', err);
+        });
+
+        // Then send them to the survey with email prefilled
+        const surveyUrl = '/survey.html?email=' + encodeURIComponent(email);
+        window.location.href = surveyUrl;
       });
-
-      // Then send them to the survey with email prefilled
-      const surveyUrl = '/survey.html?email=' + encodeURIComponent(email);
-      window.location.href = surveyUrl;
     });
-  });
-</script>
-
+  </script>
 </body>
 </html>
+
