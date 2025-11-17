@@ -57,7 +57,6 @@ export default async function handler(req, res) {
               },
             ],
           },
-          // You can add "Consent IP" or other fields later if you want.
         },
       }),
     });
@@ -74,3 +73,4 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Unexpected error' });
   }
 }
+
