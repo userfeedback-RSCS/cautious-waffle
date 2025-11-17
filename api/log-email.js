@@ -19,7 +19,6 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Parse email from body (handles JSON string or parsed object)
   let email = '';
   try {
     if (typeof req.body === 'string') {
@@ -57,7 +56,6 @@ module.exports = async (req, res) => {
       body: JSON.stringify({
         parent: { database_id: DB_ID },
         properties: {
-          // "Email" must be the title property name in your waitlist DB
           Email: {
             title: [
               {
@@ -78,6 +76,7 @@ module.exports = async (req, res) => {
       return res.status(500).json({
         error: 'Failed to write to Notion',
         status: notionRes.status,
+        text,
       });
     }
 
