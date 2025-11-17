@@ -81,11 +81,39 @@
     footer a:hover {
       text-decoration: underline;
     }
+    button:hover {
+      background: rgba(30, 41, 59, 0.95);
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
   </style>
 </head>
 <body>
   <div class="wrapper">
     <main class="card">
+      <button onclick="goBack()" style="
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid rgba(148,163,184,0.4);
+        color: #e5e7eb;
+        padding: 0.5rem 1rem;
+        border-radius: 0.75rem;
+        font-size: 0.9rem;
+        cursor: pointer;
+        margin-bottom: 1.25rem;
+        transition: all 0.2s ease;
+        ">
+        ← Back
+      </button>
+      <script>
+        function goBack() {
+          if (document.referrer && document.referrer !== location.href) {
+            history.back();
+          } else {
+            window.location.href = "/";
+          }
+        }
+      </script>
+
       <div class="tagline">Privacy</div>
       <h1>Privacy Policy<span> for this music identity MVP</span></h1>
       <div class="meta">Last updated: November 17, 2025</div>
