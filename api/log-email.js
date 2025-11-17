@@ -19,70 +19,57 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Extract email
   let email = '';
   try {
     if (typeof req.body === 'string') {
       const parsed = JSON.parse(req.body || '{}');
       email = (parsed.email || '').trim();
-    } else if (req.body && typeof req.body === 'object') {
+    } else {
       email = (req.body.email || '').trim();
     }
-  } catch (e) {
-    console.error('Body parse error:', e);
+  } catch {
     return res.status(400).json({ error: 'Invalid JSON' });
   }
 
-  if (!email) {
-    console.error('No email provided in body:', req.body);
-    return res.status(400).json({ error: 'Email required' });
-  }
+  if (!email) return res.status(400).json({ error: 'Email required' });
 
-  if (!NOTION_TOKEN || !DB_ID) {
-    console.error('Missing NOTION_TOKEN or NOTION_WAITLIST_DB_ID', {
-      hasToken: !!NOTION_TOKEN,
-      hasDbId: !!DB_ID,
-    });
-    return res.status(500).json({ error: 'Notion config missing' });
-  }
+  // ⭐ Extract best-guess IP address
+  const ip =
+    req.headers['x-forwarded-for']?.split(',')[0].trim() ||
+    req.socket?.remoteAddress ||
+    'Unknown';
 
   try {
-    const notionRes = await fetch('https://api.notion.com/v1/pages', {
-      method: 'POST',
+    const notionRes = await fetch("https://api.notion.com/v1/pages", {
+      method: "POST",
       headers: {
         Authorization: `Bearer ${NOTION_TOKEN}`,
-        'Notion-Version': '2022-06-28',
-        'Content-Type': 'application/json',
+        "Notion-Version": "2022-06-28",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         parent: { database_id: DB_ID },
         properties: {
           Email: {
-            title: [
-              {
-                text: {
-                  content: email,
-                },
-              },
-            ],
+            title: [{ text: { content: email } }],
+          },
+          "Consent IP": {
+            rich_text: [{ text: { content: ip } }],
           },
         },
       }),
     });
 
     const text = await notionRes.text();
-    console.log('Notion response status/text:', notionRes.status, text);
+    console.log("Notion response:", notionRes.status, text);
 
-    if (!notionRes.ok) {
-      return res.status(500).json({
-        error: 'Failed to write to Notion',
-        status: notionRes.status,
-        text,
-      });
-    }
+    if (!notionRes.ok)
+      return res.status(500).json({ error: "Failed to write to Notion" });
 
     return res.status(200).json({ ok: true });
   } catch (err) {
-    console.error('Unexpected error talking to Notion:', err);
-    return res.status(500).json({ error: 'Unexpected error' });
+    console.error("Unexpected error sending to Notion:", err);
+    return res.status(500).json({ error: "Unexpected error" });
   }
 };
