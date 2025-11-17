@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Thank You</title>
+  <title>Thanks for your help</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     * { box-sizing: border-box; }
@@ -25,38 +25,127 @@
     .card {
       background: rgba(15, 23, 42, 0.9);
       border-radius: 1.5rem;
-      padding: 2.25rem 2rem;
+      padding: 2.5rem 2.25rem 2.25rem;
       border: 1px solid rgba(148, 163, 184, 0.4);
       box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+      text-align: left;
     }
+
+    .tagline {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #9ca3af;
+      margin-bottom: 1.25rem;
+    }
+
+    .check-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #38bdf8, #22c55e);
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: visible;
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    .check-wrap::before {
+      content: "";
+      position: absolute;
+      inset: -8px;
+      border-radius: 999px;
+      border: 2px solid rgba(56,189,248,0.35);
+      opacity: 0;
+      animation: ring 2.4s ease-out infinite;
+    }
+
+    .check {
+      font-size: 1.8rem;
+      color: #020617;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(56,189,248,0.0); }
+      50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(56,189,248,0.45); }
+    }
+
+    @keyframes ring {
+      0% { opacity: 0.6; transform: scale(0.8); }
+      100% { opacity: 0; transform: scale(1.3); }
+    }
+
     h1 {
       font-size: 2rem;
       line-height: 1.3;
-      margin: 0 0 1rem;
+      margin: 0 0 0.75rem;
     }
-    h1 span {
-      color: #38bdf8;
-    }
+    h1 span { color: #38bdf8; }
+
     p {
-      margin: 0.4rem 0 1.1rem;
+      margin: 0.4rem 0 1rem;
       color: #cbd5f5;
     }
-    .button-row {
+
+    .share-section {
       margin-top: 1.75rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(148,163,184,0.35);
     }
-    a.button {
-      display: inline-block;
+
+    .share-label {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin-bottom: 0.75rem;
+    }
+
+    .share-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .share-input {
+      flex: 1 1 220px;
+      padding: 0.55rem 0.7rem;
       border-radius: 999px;
-      padding: 0.7rem 1.4rem;
+      border: 1px solid #4b5563;
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 0.9rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .share-button {
+      border-radius: 999px;
+      border: none;
+      padding: 0.55rem 1.2rem;
       font-weight: 600;
-      text-decoration: none;
+      cursor: pointer;
+      white-space: nowrap;
       background: linear-gradient(135deg, #22c55e, #22d3ee);
       color: #020617;
+      font-size: 0.9rem;
     }
-    a.button:hover {
+    .share-button:hover {
       filter: brightness(1.07);
       transform: translateY(-1px);
     }
+
+    .share-helper {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
     footer {
       margin-top: 3rem;
       margin-bottom: 2rem;
@@ -70,19 +159,53 @@
       text-decoration: none;
       margin-right: 1rem;
     }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .card { padding: 2rem 1.6rem 2rem; }
+      h1 { font-size: 1.7rem; }
+    }
   </style>
 </head>
 <body>
   <div class="wrapper">
     <main class="card">
-      <h1>Thanks for helping us <span>understand the switch.</span></h1>
+      <div class="tagline">MVP survey</div>
 
-      <p>Your insight helps us figure out why switching from Spotify feels impossible — and what a better experience could look like.</p>
+      <div class="check-wrap">
+        <div class="check">✓</div>
+      </div>
 
-      <p>If we have follow-up questions or early-access openings, we’ll reach out to the email you used.</p>
+      <h1>Thanks for helping us <span>map the Spotify → Tidal brain.</span></h1>
 
-      <div class="button-row">
-        <a class="button" href="/">Back to landing page</a>
+      <p>
+        Your answers help us understand what actually feels painful about
+        switching and what a better experience would need to get right.
+      </p>
+
+      <p>
+        If we have follow-up questions or early-access spots, we’ll reach out
+        to the email you used.
+      </p>
+
+      <div class="share-section">
+        <div class="share-label">Know someone else who’s obsessed with their Spotify recs?</div>
+        <div class="share-row">
+          <input
+            id="share-link"
+            class="share-input"
+            type="text"
+            readonly
+          />
+          <button id="copy-btn" class="share-button" type="button">
+            Copy link to share
+          </button>
+        </div>
+        <div id="copy-status" class="share-helper">
+          Send them the link so we can steal their brain too (in a nice way).
+        </div>
       </div>
     </main>
   </div>
@@ -92,5 +215,29 @@
     <span style="color:#4b5563;">•</span>
     <span style="margin-left:1rem;color:#4b5563;">Not affiliated with Spotify or Tidal.</span>
   </footer>
+
+  <script>
+    (function () {
+      // Use the landing page URL as the share link
+      const origin = window.location.origin || 'https://musicmigrationwaitlist.vercel.app';
+      const shareUrl = origin + '/';
+      const input = document.getElementById('share-link');
+      const btn = document.getElementById('copy-btn');
+      const status = document.getElementById('copy-status');
+
+      if (input) input.value = shareUrl;
+
+      if (btn) {
+        btn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(shareUrl);
+            if (status) status.textContent = 'Copied! Paste it to a friend who refuses to leave Spotify.';
+          } catch (err) {
+            if (status) status.textContent = 'Copy failed — but you can still highlight and copy the link.';
+          }
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
