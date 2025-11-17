@@ -1,5 +1,3 @@
-// api/log-email.js
-
 export default async function handler(request) {
   if (request.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
@@ -26,61 +24,57 @@ export default async function handler(request) {
     });
   }
 
+  // Vercel gives client IP here:
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    "Unknown";
+
   const NOTION_TOKEN = process.env.NOTION_TOKEN;
   const DB_ID = process.env.NOTION_WAITLIST_DB_ID;
 
-  if (!NOTION_TOKEN || !DB_ID) {
-    return new Response(JSON.stringify({ error: 'Notion config missing' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
   try {
-    const notionRes = await fetch('https://api.notion.com/v1/pages', {
-      method: 'POST',
+    const notionRes = await fetch("https://api.notion.com/v1/pages", {
+      method: "POST",
       headers: {
         Authorization: `Bearer ${NOTION_TOKEN}`,
-        'Notion-Version': '2022-06-28',
-        'Content-Type': 'application/json',
+        "Notion-Version": "2022-06-28",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         parent: { database_id: DB_ID },
         properties: {
-          // This writes into your primary "Email" title column
           Email: {
-            title: [
-              {
-                text: {
-                  content: email,
-                },
-              },
-            ],
+            title: [{ text: { content: email } }],
           },
-          // If you added a "Submitted At" Created time property in Notion,
-          // it will be filled automatically by Notion.
+          "Consent IP": {
+            rich_text: [{ text: { content: ip } }],
+          }
+          // "Submitted At" (Created time) auto-fills itself
         },
       }),
     });
 
     if (!notionRes.ok) {
       const text = await notionRes.text();
-      console.error('Notion error:', text);
-      return new Response(JSON.stringify({ error: 'Failed to write to Notion' }), {
+      console.error("Notion error:", text);
+      return new Response(JSON.stringify({ error: "Failed to write to Notion" }), {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
     }
 
     return new Response(JSON.stringify({ ok: true }), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
+
   } catch (err) {
-    console.error('Unexpected error:', err);
-    return new Response(JSON.stringify({ error: 'Unexpected error' }), {
+    console.error("Unexpected error:", err);
+    return new Response(JSON.stringify({ error: "Unexpected error" }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   }
 }
+
