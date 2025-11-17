@@ -13,8 +13,9 @@
       color: #e5e7eb;
       min-height: 100vh;
       display: flex;
-      align-items: flex-start;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
       padding: 3rem 1.5rem;
     }
     .wrapper {
@@ -62,6 +63,21 @@
       h1 { font-size: 1.6rem; }
       iframe { min-height: 1600px; }
     }
+    footer {
+      margin-top: 2rem;
+      font-size: 0.75rem;
+      text-align: center;
+      color: #6b7280;
+      width: 100%;
+    }
+    footer a {
+      color: #9ca3af;
+      text-decoration: none;
+      margin-right: 1rem;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -91,14 +107,13 @@
 
   <script>
     (function () {
-      // 1. Get email from this page's URL (e.g. /survey.html?email=foo@bar.com)
+      // Get email from URL: /survey.html?email=foo@bar.com
       const params = new URLSearchParams(window.location.search);
       const email = params.get('email') || '';
 
-      // 2. Base Tally form URL (replace with YOUR form URL)
-      const tallyBaseUrl = 'https://tally.so/r/Y55DM5'; // <-- change this
+      // Base Tally form URL
+      const tallyBaseUrl = 'https://tally.so/r/Y55DM5';
 
-      // 3. Build query string for Tally: email + styling params
       const queryParts = [];
       if (email) {
         queryParts.push('email=' + encodeURIComponent(email));
@@ -112,19 +127,17 @@
 
       const src = tallyBaseUrl + '?' + queryParts.join('&');
 
-      // 4. Apply to iframe
       const iframe = document.getElementById('tally-survey');
       iframe.setAttribute('data-tally-src', src);
-      // widgets/embed.js will read data-tally-src automatically
+      // Tally embed script will load this automatically
     })();
   </script>
-  <footer style="margin-top: 2rem; font-size: 0.75rem; text-align: center; color: #6b7280;">
-    <a href="/privacy.html" style="color: #9ca3af; text-decoration: none; margin-right: 1rem;">
-    Privacy Policy
-    </a>
+
+  <footer>
+    <a href="/privacy.html">Privacy Policy</a>
     <span style="color: #4b5563;">•</span>
     <span style="margin-left: 1rem; color: #4b5563;">
-    Not affiliated with Spotify or Tidal.
+      Not affiliated with Spotify or Tidal.
     </span>
   </footer>
 
