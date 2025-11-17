@@ -1,80 +1,76 @@
-export default async function handler(request) {
-  if (request.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { 'Content-Type': 'application/json' },
-    });
+// api/log-email.js
+// Logs email into your Notion "Waitlist Emails – Music Migration" database.
+// Env vars needed in Vercel:
+//   NOTION_TOKEN          - Notion internal integration token
+//   NOTION_WAITLIST_DB_ID - database_id of your waitlist DB
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', ['POST']);
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  let body;
+  // Parse email from body (handles JSON or string)
+  let email = '';
   try {
-    body = await request.json();
+    if (typeof req.body === 'string') {
+      const body = JSON.parse(req.body || '{}');
+      email = (body.email || '').trim();
+    } else {
+      email = (req.body?.email || '').trim();
+    }
   } catch (e) {
-    return new Response(JSON.stringify({ error: 'Invalid JSON' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    console.error('Body parse error:', e);
+    return res.status(400).json({ error: 'Invalid JSON' });
   }
 
-  const email = (body.email || '').trim();
   if (!email) {
-    return new Response(JSON.stringify({ error: 'Email required' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(400).json({ error: 'Email required' });
   }
-
-  // Vercel gives client IP here:
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
-    "Unknown";
 
   const NOTION_TOKEN = process.env.NOTION_TOKEN;
   const DB_ID = process.env.NOTION_WAITLIST_DB_ID;
 
+  if (!NOTION_TOKEN || !DB_ID) {
+    console.error('Missing NOTION_TOKEN or NOTION_WAITLIST_DB_ID');
+    return res.status(500).json({ error: 'Notion config missing' });
+  }
+
   try {
-    const notionRes = await fetch("https://api.notion.com/v1/pages", {
-      method: "POST",
+    const notionRes = await fetch('https://api.notion.com/v1/pages', {
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${NOTION_TOKEN}`,
-        "Notion-Version": "2022-06-28",
-        "Content-Type": "application/json",
+        'Notion-Version': '2022-06-28',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         parent: { database_id: DB_ID },
         properties: {
+          // "Email" must be the title property name in your Notion DB
           Email: {
-            title: [{ text: { content: email } }],
+            title: [
+              {
+                text: {
+                  content: email,
+                },
+              },
+            ],
           },
-          "Consent IP": {
-            rich_text: [{ text: { content: ip } }],
-          }
-          // "Submitted At" (Created time) auto-fills itself
+          // You can add "Consent IP" or other fields later if you want.
         },
       }),
     });
 
     if (!notionRes.ok) {
       const text = await notionRes.text();
-      console.error("Notion error:", text);
-      return new Response(JSON.stringify({ error: "Failed to write to Notion" }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      });
+      console.error('Notion error:', text);
+      return res.status(500).json({ error: 'Failed to write to Notion' });
     }
 
-    return new Response(JSON.stringify({ ok: true }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-
+    return res.status(200).json({ ok: true });
   } catch (err) {
-    console.error("Unexpected error:", err);
-    return new Response(JSON.stringify({ error: "Unexpected error" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    console.error('Unexpected error:', err);
+    return res.status(500).json({ error: 'Unexpected error' });
   }
 }
-
